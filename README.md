@@ -1,2 +1,2 @@
 # JONI KEOS
-Project Pertama KRAI'22
+Project Pertama KRAI/KRTMI'22
