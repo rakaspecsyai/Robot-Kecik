@@ -1,32 +1,34 @@
 #include <PS2X_lib.h>
 
-const int IN_1 = 29;
-const int IN_2 = 27;
-const int IN_3 = 25;
-const int IN_4 = 23;
-const int pwmA = 9;
-const int pwmB = 10; 
+const int IN_1 = 29; //motor kiri
+const int IN_2 = 27; //motor kiri
+const int IN_3 = 25; //motor kanan
+const int IN_4 = 23; //motor kanan
+const int pwmA = 9;  //pwm motor kiri
+const int pwmB = 10; //pwm motor kanan
 const int sensorSharp = A0;
 
-long sensorValue, distance;
+long sensorValue, distance; //sensor sharp
 int extSpeed;
 
-#define PS2_DAT 44  //14
-#define PS2_CMD 46  //15
-#define PS2_SEL 48  //16
-#define PS2_CLK 50  //17
+#define PS2_DAT 44 //data
+#define PS2_CMD 46 //command
+#define PS2_SEL 48 //attention
+#define PS2_CLK 50 //clock
 
 #define pressures false
 #define rumble false
 
 PS2X controller;
 
-int baseSpeed = 100;
+
+int baseSpeed;
 int maxSpeed = 255;
 int speedX = 90;
 int speedSq = 150;
 int speedTr = 120;
-int speedCir = 180;
+int speedCir = 100; //default speed
+int x;
 
 void setup() {
   // put your setup code here, to run once:
@@ -37,13 +39,13 @@ void setup() {
   Serial.begin(57600);
   delay(300);
 
-  controller.config_gamepad(PS2_CLK, PS2_CMD, PS2_SEL, PS2_DAT, pressures, rumble);
+  controller.config_gamepad(PS2_CLK, PS2_CMD, PS2_SEL, PS2_DAT, pressures, rumble); //configure controller gamepad
   controller.readType();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  controller.read_gamepad();
+  controller.read_gamepad(); //reading input
   
   //Mode
   if(controller.ButtonPressed(PSB_CROSS)){
@@ -51,7 +53,7 @@ void loop() {
   }
 
   else if(controller.ButtonPressed(PSB_CIRCLE)){
-    baseSpeed = speedCir;
+    baseSpeed = speedCir; //default speed
   }
 
   else if(controller.ButtonPressed(PSB_SQUARE)){
@@ -62,17 +64,22 @@ void loop() {
     baseSpeed = speedTr;
   }
 
+  Serial.println(baseSpeed);
+  delay(50);
 
-  
-  if (controller.Analog(PSS_LY) == 255 && controller.Analog(PSS_RX) == 255) {
-    serongKanan(baseSpeed);
+  x = 1;
 
-  }
 
-  else if(controller.Analog(PSS_RX) == 255){
+  if(controller.Analog(PSS_RX) == 255){
     maju(baseSpeed);
     if(controller.Button(PSB_R1)){
       maju(maxSpeed);
+    }
+    
+    while(controller.Analog(PSS_RX) == 255){
+      drift(baseSpeed);
+      x++;
+      
     }
   }
 
