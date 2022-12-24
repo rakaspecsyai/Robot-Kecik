@@ -41,11 +41,12 @@ void belokKiri(int baseSpeed) {
 void muterKanan(int baseSpeed) {
   digitalWrite(IN_1, HIGH);
   digitalWrite(IN_2, LOW);
-  analogWrite(pwmA, baseSpeed);
+  analogWrite(pwmA, 150);
 
   digitalWrite(IN_3, LOW);
   digitalWrite(IN_4, HIGH);
-  analogWrite(pwmB, baseSpeed);
+  analogWrite(pwmB, 150);
+  delay(1000);
 }
 
 void muterKiri(int baseSpeed) {
@@ -58,14 +59,14 @@ void muterKiri(int baseSpeed) {
   analogWrite(pwmA, baseSpeed);
 }
 
-void serongKanan(int baseSpeed){
+void drift(int baseSpeed){
   digitalWrite(IN_1, HIGH);
   digitalWrite(IN_2, LOW);
   analogWrite(pwmA, baseSpeed);
 
-  digitalWrite(IN_3, LOW);
-  digitalWrite(IN_4, HIGH);
-  analogWrite(pwmB, baseSpeed/2);
+  digitalWrite(IN_3, HIGH);
+  digitalWrite(IN_4, LOW);
+  analogWrite(pwmB, baseSpeed-x);
 }
 
 void pause() {
